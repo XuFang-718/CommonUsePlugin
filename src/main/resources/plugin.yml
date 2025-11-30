@@ -1,0 +1,56 @@
+name: CommonUsePlugin
+version: '${version}'
+main: top.touchstudio.cup.CommonUsePlugin
+api-version: '1.20'
+author: TouchStudio
+commands:
+  cup:
+    description: CommonUsePlugin
+  tpa:
+    description: 传送玩家
+  hat:
+    description: 将主手物品戴在头上
+  back:
+    description: 返回死亡地点
+  money:
+    description: 金钱指令
+  quit:
+    description: 退出服务器
+  chainmining:
+    description: 连锁挖矿
+  cm:
+    description: 连锁挖矿
+  nv:
+    description: 给玩家夜视效果~
+  nightvision:
+    description: 给玩家夜视效果~
+  夜视:
+    description: 给玩家夜视效果~
+  reg:
+    description: 注册命令
+  register:
+    description: 注册命令
+  l:
+    description: 登录命令
+  login:
+    description: 登录命令
+  gm:
+    description: BestGamemode
+  gm0:
+    description: 设置为生存模式
+  生存模式:
+    description: 设置为生存模式
+  gm1:
+    description: 设置为创造模式
+  创造模式:
+    description: 设置为创造模式
+  gm2:
+    description: 设置为冒险模式
+  冒险模式:
+    description: 设置为冒险模式
+  gm3:
+    description: 设置为旁观模式
+  旁观模式:
+    description: 设置为旁观模式
+  home:
+    description: home
