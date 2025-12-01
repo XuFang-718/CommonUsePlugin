@@ -192,9 +192,20 @@ public class TeleportManager implements Listener {
         Location from = event.getFrom();
         Location to = event.getTo();
 
+        // 检查 to 是否为 null
+        if (to == null) {
+            return;
+        }
+
         // 只检查位置变化，忽略视角变化（允许转动视角）
-        if (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ()) {
-            // 玩家移动了，取消传送
+        // 使用更精确的比较，避免浮点数误差
+        double deltaX = Math.abs(from.getX() - to.getX());
+        double deltaY = Math.abs(from.getY() - to.getY());
+        double deltaZ = Math.abs(from.getZ() - to.getZ());
+
+        // 只有当位置变化超过 0.01 时才认为是移动（避免微小的浮点数误差）
+        if (deltaX > 0.01 || deltaY > 0.01 || deltaZ > 0.01) {
+            // 玩家移动了位置，取消传送
             cancelTeleport(player, true);
         }
     }

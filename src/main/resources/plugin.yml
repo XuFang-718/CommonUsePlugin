@@ -7,11 +7,17 @@ commands:
   cup:
     description: CommonUsePlugin
   tpa:
-    description: 发送传送请求
+    description: 发送传送请求(传送到对方)
   tpaccept:
     description: 接受传送请求
   tpadeny:
     description: 拒绝传送请求
+  tpahere:
+    description: 发送传送请求(对方传送到你)
+  tphereaccept:
+    description: 接受tpahere请求
+  tpheredeny:
+    description: 拒绝tpahere请求
   hat:
     description: 将主手物品戴在头上
   back:

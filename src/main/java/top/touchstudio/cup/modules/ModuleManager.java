@@ -90,10 +90,16 @@ public class ModuleManager {
             plugin.getCommand("tpa").setExecutor(new top.touchstudio.cup.modules.tpa.TpaCommand());
             plugin.getCommand("tpaccept").setExecutor(new top.touchstudio.cup.modules.tpa.TpaAcceptCommand());
             plugin.getCommand("tpadeny").setExecutor(new top.touchstudio.cup.modules.tpa.TpaDenyCommand());
+            plugin.getCommand("tpahere").setExecutor(new top.touchstudio.cup.modules.tpa.TpaHereCommand());
+            plugin.getCommand("tphereaccept").setExecutor(new top.touchstudio.cup.modules.tpa.TpaHereAcceptCommand());
+            plugin.getCommand("tpheredeny").setExecutor(new top.touchstudio.cup.modules.tpa.TpaHereDenyCommand());
         }else {
             CommandUtil.unregisterCommand(plugin,"tpa");
             CommandUtil.unregisterCommand(plugin,"tpaccept");
             CommandUtil.unregisterCommand(plugin,"tpadeny");
+            CommandUtil.unregisterCommand(plugin,"tpahere");
+            CommandUtil.unregisterCommand(plugin,"tphereaccept");
+            CommandUtil.unregisterCommand(plugin,"tpheredeny");
         }
 
         //hat
