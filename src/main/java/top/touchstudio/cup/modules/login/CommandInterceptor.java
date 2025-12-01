@@ -10,6 +10,7 @@ import top.touchstudio.cup.utils.ChatUtil;
 public class CommandInterceptor implements Listener {
 
     private final CommonUsePlugin plugin;
+    private static final String PREFIX = "Login";
 
     public CommandInterceptor(CommonUsePlugin plugin) {
         this.plugin = plugin;
@@ -28,7 +29,7 @@ public class CommandInterceptor implements Listener {
                 return;
             } else {
                 // 禁用其他指令
-                ChatUtil.pluginSay(player,"&4请先完成注册或登录!");
+                ChatUtil.pluginSay(player, PREFIX, "&4请先完成注册或登录!");
                 event.setCancelled(true);
             }
         }

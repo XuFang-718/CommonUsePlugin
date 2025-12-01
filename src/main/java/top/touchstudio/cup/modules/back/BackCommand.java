@@ -24,12 +24,13 @@ import java.util.HashMap;
  */
 public class BackCommand implements CommandExecutor, Listener {
     public static HashMap<Player, Location> BackMap = new HashMap<>();
+    private static final String PREFIX = "Back";
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         Player player = (Player) commandSender;
         if (!BackMap.containsKey(player)){
-            ChatUtil.pluginSay(player,"未找到死亡地点");
+            ChatUtil.pluginSay(player, PREFIX, "未找到死亡地点");
             return false;
         }
 
@@ -37,7 +38,7 @@ public class BackCommand implements CommandExecutor, Listener {
         TeleportManager.teleportWithDelay(player, backLoc, 3,
                 p -> {
                     BackMap.remove(p);
-                    ChatUtil.pluginSay(p, "已传送到死亡地点");
+                    ChatUtil.pluginSay(p, PREFIX, "已传送到死亡地点");
                 },
                 null);
 
@@ -49,6 +50,6 @@ public class BackCommand implements CommandExecutor, Listener {
     public static void onPlayerDeath(PlayerDeathEvent event){
         Player player = event.getPlayer();
         BackMap.put(player,player.getLocation());
-        ChatUtil.pluginSay(player,"使用/back命令返回死亡地点");
+        ChatUtil.pluginSay(player, PREFIX, "使用/back命令返回死亡地点");
     }
 }

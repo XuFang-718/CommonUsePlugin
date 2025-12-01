@@ -12,29 +12,31 @@ import top.touchstudio.cup.utils.ChatUtil;
 
 public class NightVisionCommand implements CommandExecutor {
 
+    private static final String PREFIX = "夜视";
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (!(sender instanceof Player)) {
-            ChatUtil.pluginSay(sender, CU.t("&4只有玩家可以使用此命令"));
+            ChatUtil.pluginSay(sender, PREFIX, CU.t("&4只有玩家可以使用此命令"));
             return true;
         }
 
         Player player = (Player) sender;
 
         if (args.length > 0) {
-            ChatUtil.pluginSay(sender, CU.t("&6用法: &b/nv &6或者 &b/nightvision &6或者 &b/夜视"));
+            ChatUtil.pluginSay(sender, PREFIX, CU.t("&6用法: &b/nv &6或者 &b/nightvision &6或者 &b/夜视"));
             return true;
         }
 
         if (player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
 
             player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            ChatUtil.pluginSay(player, CU.t("&4夜视已关闭"));
+            ChatUtil.pluginSay(player, PREFIX, CU.t("&4夜视已关闭"));
         } else {
             PotionEffect nightVision = new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false);
             player.addPotionEffect(nightVision);
-            ChatUtil.pluginSay(player, CU.t("&b夜视已开启"));
+            ChatUtil.pluginSay(player, PREFIX, CU.t("&b夜视已开启"));
         }
 
         return true;

@@ -25,6 +25,7 @@ public class PlayerJoinListener implements Listener {
     private final CommonUsePlugin plugin;
     private final Map<UUID, BukkitRunnable> playerTimers = new HashMap<>();
     private static final long TIMEOUT = 40 * 20L; //40 = 40秒
+    private static final String PREFIX = "Login";
 
     public PlayerJoinListener(CommonUsePlugin plugin) {
         this.plugin = plugin;
@@ -36,12 +37,12 @@ public class PlayerJoinListener implements Listener {
         PlayerData data = PlayerDataManager.loadPlayerData(player);
 
         if (data == null || !data.isRegistered()) {
-            ChatUtil.pluginSay(player, "请输入 &6/reg &b<密码> &b<重复密码> &r注册账号!");
+            ChatUtil.pluginSay(player, PREFIX, "请输入 &6/reg &b<密码> &b<重复密码> &r注册账号!");
             PlayerDataManager.setPlayerRegistering(player, true);
             disableAllCommandsForPlayer(player);
             startTimeoutTask(player);
         } else {
-            ChatUtil.pluginSay(player,"请使用 &6/l &b<密码> &r登录账号");
+            ChatUtil.pluginSay(player, PREFIX, "请使用 &6/l &b<密码> &r登录账号");
             PlayerDataManager.setPlayerRegistering(player, true);
             disableAllCommandsForPlayer(player);
             startTimeoutTask(player);
@@ -75,7 +76,7 @@ public class PlayerJoinListener implements Listener {
         Player player = event.getPlayer();
         if (PlayerDataManager.isPlayerLocked(player)) {
             event.setCancelled(true);
-            ChatUtil.pluginSay(player,"&4请先完成注册或登录!");
+            ChatUtil.pluginSay(player, PREFIX, "&4请先完成注册或登录!");
         }
     }
 

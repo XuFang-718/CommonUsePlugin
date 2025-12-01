@@ -15,6 +15,8 @@ import top.touchstudio.cup.utils.ChatUtil;
  * @Tips XuFang is Gay!
  */
 public class HatCommand implements CommandExecutor {
+    private static final String PREFIX = "Hat";
+
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         Player player = (Player) commandSender;
@@ -22,9 +24,7 @@ public class HatCommand implements CommandExecutor {
         ItemStack hat = player.getInventory().getHelmet();
         player.getInventory().setItemInMainHand(hat);
         player.getInventory().setHelmet(mainHand);
-        ChatUtil.pluginSay(player,"你带上了新帽子!");
-
-
+        ChatUtil.pluginSay(player, PREFIX, "你带上了新帽子!");
 
         return false;
     }

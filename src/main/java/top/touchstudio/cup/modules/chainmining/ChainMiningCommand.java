@@ -15,6 +15,7 @@ import static top.touchstudio.cup.modules.chainmining.ChainMiningListener.CMMap;
 public class ChainMiningCommand implements CommandExecutor {
 
     private final CommonUsePlugin plugin;
+    private static final String PREFIX = "连锁";
 
     public ChainMiningCommand(CommonUsePlugin plugin) {
         this.plugin = plugin;
@@ -28,18 +29,18 @@ public class ChainMiningCommand implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            ChatUtil.pluginSay(sender, CU.t("用法: &6/chainmining &r[&bon&r|&coff&r]"));
+            ChatUtil.pluginSay(sender, PREFIX, CU.t("用法: &6/chainmining &r[&bon&r|&coff&r]"));
             return true;
         }
 
         if ("on".equalsIgnoreCase(args[0])) {
             CMMap.put((Player) sender,true);
-            ChatUtil.pluginSay(sender, CU.t("&b连锁挖矿已开启"));
+            ChatUtil.pluginSay(sender, PREFIX, CU.t("&b连锁挖矿已开启"));
         } else if ("off".equalsIgnoreCase(args[0])) {
             CMMap.put((Player) sender,false);
-            ChatUtil.pluginSay(sender, CU.t("&4连锁挖矿已关闭"));
+            ChatUtil.pluginSay(sender, PREFIX, CU.t("&4连锁挖矿已关闭"));
         } else {
-            ChatUtil.pluginSay(sender, CU.t("用法: &6/chainmining &r[&bon&r|&coff&r]"));
+            ChatUtil.pluginSay(sender, PREFIX, CU.t("用法: &6/chainmining &r[&bon&r|&coff&r]"));
         }
         return true;
     }

@@ -31,22 +31,24 @@ public class Tpa implements CommandExecutor, TabExecutor, Listener {
     public static HashMap<Player, Player> TpaMap = new HashMap<>();
     public static HashMap<Player, BukkitTask> TpaTasks = new HashMap<>();
 
+    private static final String PREFIX = "TPA";
+
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         if (strings.length == 0) {
             Player player = (Player) commandSender;
-            ChatUtil.pluginSay(player, "/tpa 玩家名称");
+            ChatUtil.pluginSay(player, PREFIX, "/tpa 玩家名称");
             return false;
         }
 
         if (strings.length == 1 && strings[0].equalsIgnoreCase("accept")) {
             Player player = (Player) commandSender;
             if (!TpaMap.containsKey(player)) {
-                ChatUtil.pluginSay(player, "您没有传送请求");
+                ChatUtil.pluginSay(player, PREFIX, "您没有传送请求");
                 return false;
             }
             Player tpaTo = TpaMap.get(player);
-            ChatUtil.pluginSay(player, "对方已接受传送请求");
+            ChatUtil.pluginSay(player, PREFIX, "对方已接受传送请求");
             Location targetLoc = player.getLocation();
             TeleportManager.teleportWithDelay(tpaTo, targetLoc, 3,
                     p -> {
@@ -55,8 +57,8 @@ public class Tpa implements CommandExecutor, TabExecutor, Listener {
                             TpaTasks.get(player).cancel();
                             TpaTasks.remove(player);
                         }
-                        ChatUtil.pluginSay(p, "传送完成");
-                        ChatUtil.pluginSay(player, "对方已传送到您身边");
+                        ChatUtil.pluginSay(p, PREFIX, "传送完成");
+                        ChatUtil.pluginSay(player, PREFIX, "对方已传送到您身边");
                     },
                     null);
             return true;
@@ -65,7 +67,7 @@ public class Tpa implements CommandExecutor, TabExecutor, Listener {
         if (strings.length == 1 && strings[0].equalsIgnoreCase("deny")) {
             Player player = (Player) commandSender;
             if (!TpaMap.containsKey(player)) {
-                ChatUtil.pluginSay(player, "您没有传送请求");
+                ChatUtil.pluginSay(player, PREFIX, "您没有传送请求");
                 return false;
             }
             Player tpaTo = TpaMap.get(player);
@@ -74,8 +76,8 @@ public class Tpa implements CommandExecutor, TabExecutor, Listener {
                 TpaTasks.get(player).cancel();
                 TpaTasks.remove(player);
             }
-            ChatUtil.pluginSay(player, "已拒绝传送");
-            ChatUtil.pluginSay(tpaTo, "对方拒绝了传送");
+            ChatUtil.pluginSay(player, PREFIX, "已拒绝传送");
+            ChatUtil.pluginSay(tpaTo, PREFIX, "对方拒绝了传送");
             return true;
         }
 
@@ -83,17 +85,17 @@ public class Tpa implements CommandExecutor, TabExecutor, Listener {
             Player player = (Player) commandSender;
             Player tpaTo = Bukkit.getPlayer(strings[0]);
             if (tpaTo == null) {
-                ChatUtil.pluginSay(commandSender, "玩家不存在或不在线");
+                ChatUtil.pluginSay(commandSender, PREFIX, "玩家不存在或不在线");
                 return false;
             }
             if (tpaTo.equals(player)) {
-                ChatUtil.pluginSay(player, "不能传送自己");
+                ChatUtil.pluginSay(player, PREFIX, "不能传送自己");
                 return false;
             }
 
             TpaMap.put(tpaTo, player);
-            ChatUtil.pluginSay(player, "传送请求已发送");
-            ChatUtil.pluginSay(tpaTo, "玩家 " + player.getName() + " 想要传送到您身边，请在三分钟内接受\n" + ChatColor.WHITE + "[" + ChatColor.AQUA + "CUP" + ChatColor.WHITE + "] 输入 /tpa accept 同意 /tpa deny 拒绝");
+            ChatUtil.pluginSay(player, PREFIX, "传送请求已发送");
+            ChatUtil.pluginSay(tpaTo, PREFIX, "玩家 " + player.getName() + " 想要传送到您身边，请在三分钟内接受\n" + ChatColor.WHITE + "[" + ChatColor.AQUA + PREFIX + ChatColor.WHITE + "] 输入 /tpa accept 同意 /tpa deny 拒绝");
 
             if (TpaTasks.containsKey(tpaTo)) {
                 TpaTasks.get(tpaTo).cancel();
@@ -102,8 +104,8 @@ public class Tpa implements CommandExecutor, TabExecutor, Listener {
 
             BukkitTask task = Bukkit.getScheduler().runTaskLater(CommonUsePlugin.instance, () -> {
                 TpaMap.remove(tpaTo);
-                ChatUtil.pluginSay(player, "请求过期");
-                ChatUtil.pluginSay(tpaTo, "请求过期");
+                ChatUtil.pluginSay(player, PREFIX, "请求过期");
+                ChatUtil.pluginSay(tpaTo, PREFIX, "请求过期");
                 TpaTasks.remove(tpaTo);
             }, 3 * 60 * 20); // 3分钟，单位为tick，20 tick = 1秒
 

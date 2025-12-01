@@ -9,25 +9,27 @@ import org.jetbrains.annotations.NotNull;
 import top.touchstudio.cup.utils.ChatUtil;
 
 public class Gm0 implements CommandExecutor {
+    private static final String PREFIX = "GM";
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
-            ChatUtil.pluginSay(sender, "&4该命令只能由玩家执行!");
+            ChatUtil.pluginSay(sender, PREFIX, "&4该命令只能由玩家执行!");
             return false;
         }
 
         Player player = (Player) sender;
 
         if (!player.isOp()) {
-            ChatUtil.pluginSay(player, "&4你不是OP!");
+            ChatUtil.pluginSay(player, PREFIX, "&4你不是OP!");
             return false;
         }
 
         if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SPECTATOR) {
             player.setGameMode(GameMode.SURVIVAL);
-            ChatUtil.pluginSay(player, "&b您已成为生存");
+            ChatUtil.pluginSay(player, PREFIX, "&b您已成为生存");
         } else {
-            ChatUtil.pluginSay(player, "&4你已经在生存模式了!");
+            ChatUtil.pluginSay(player, PREFIX, "&4你已经在生存模式了!");
         }
 
         return true;

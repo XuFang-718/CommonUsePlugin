@@ -28,6 +28,8 @@ import java.util.List;
  */
 public class HomeCommand implements CommandExecutor, TabCompleter {
 
+    private static final String PREFIX = "Home";
+
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         int maxHome = Integer.parseInt(ModuleConfig.modulesSection.get("home.MaxHome").toString());
@@ -36,39 +38,39 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
         ConfigurationSection homeSection = config.getConfigurationSection(player.getName()).getConfigurationSection("homes");
         if (strings.length == 1 && strings[0].equalsIgnoreCase("list")){
             if (homeSection.getKeys(false).isEmpty()){
-                ChatUtil.pluginSay(player,"未找到任何Home");
+                ChatUtil.pluginSay(player, PREFIX, "未找到任何Home");
                 return true;
             }
             homeSection.getKeys(false).forEach(key -> {
-               ChatUtil.pluginSay(player,key);
+               ChatUtil.pluginSay(player, PREFIX, key);
             });
             return true;
 
         }
 
         if(strings.length < 1) {
-            ChatUtil.pluginSay(player,"用法 /home 名称");
+            ChatUtil.pluginSay(player, PREFIX, "用法 /home 名称");
             return true;
         }
         if (strings[0].equalsIgnoreCase("set")) {
             if (strings.length != 2) {
-                ChatUtil.pluginSay(player,"用法 /home set 名称");
+                ChatUtil.pluginSay(player, PREFIX, "用法 /home set 名称");
                 return true;
             }
 
             if (homeSection.getKeys(false).size() >= maxHome){
-                ChatUtil.pluginSay(player,"已达到最大Home数");
+                ChatUtil.pluginSay(player, PREFIX, "已达到最大Home数");
                 return true;
             }
             if (homeSection != null) {
                 if (homeSection.contains(strings[1])) {
-                    ChatUtil.pluginSay(player,"存在相同的名字");
+                    ChatUtil.pluginSay(player, PREFIX, "存在相同的名字");
                     return true;
                 }
             }
 
             homeSection.set(strings[1], player.getLocation());
-            ChatUtil.pluginSay(player,"已添加 " + strings[1]);
+            ChatUtil.pluginSay(player, PREFIX, "已添加 " + strings[1]);
             try {
                 config.save(PlayerConfig.playerConfigFile);
             } catch (IOException e) {
@@ -78,18 +80,18 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
         }
         if (strings[0].equalsIgnoreCase("delete")) {
             if (strings.length != 2) {
-                ChatUtil.pluginSay(player,"用法 /home delete 名称");
+                ChatUtil.pluginSay(player, PREFIX, "用法 /home delete 名称");
                 return true;
             }
             if (homeSection != null) {
                 if (!homeSection.contains(strings[1])) {
-                    ChatUtil.pluginSay(player,"该Home不存在");
+                    ChatUtil.pluginSay(player, PREFIX, "该Home不存在");
                     return true;
                 }
             }
 
             homeSection.set(strings[1], null);
-            ChatUtil.pluginSay(player,"已删除 " + strings[1]);
+            ChatUtil.pluginSay(player, PREFIX, "已删除 " + strings[1]);
             try {
                 config.save(PlayerConfig.playerConfigFile);
             } catch (IOException e) {
@@ -100,14 +102,14 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
 
         if(strings.length  ==1) {
             if (homeSection == null || !homeSection.contains(strings[0])) {
-                ChatUtil.pluginSay(player,"该Home不存在");
+                ChatUtil.pluginSay(player, PREFIX, "该Home不存在");
                 return true;
             }
 
             Location homeLoc = (Location) homeSection.get(strings[0]);
             String homeName = strings[0];
             TeleportManager.teleportWithDelay(player, homeLoc, 3,
-                    p -> ChatUtil.pluginSay(p, "已传送到 " + homeName),
+                    p -> ChatUtil.pluginSay(p, PREFIX, "已传送到 " + homeName),
                     null);
             return true;
         }
