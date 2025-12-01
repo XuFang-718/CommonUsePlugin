@@ -187,7 +187,7 @@ public class MoneyAPI {
      * @return 货币名称
      */
     public String getCurrencyName() {
-        return "米";
+        return "枚硬币";
     }
 
     /**

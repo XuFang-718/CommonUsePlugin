@@ -96,8 +96,8 @@ public class MoneyCommand implements CommandExecutor, TabExecutor {
         }
 
         if (db.transfer(player.getName(), payTo.getName(), amount)) {
-            ChatUtil.pluginSay(player, "Money", CU.t("&r您已向玩家&6 " + payTo.getName() + " &r转了&6 " + amount + " &r米"));
-            ChatUtil.pluginSay(payTo, "Money", CU.t("&r玩家&6 " + player.getName() + " &r向您转了&6 " + amount + " &r米"));
+            ChatUtil.pluginSay(player, "Money", CU.t("&r您已向玩家&6 " + payTo.getName() + " &r转了&6 " + amount + " &r枚硬币"));
+            ChatUtil.pluginSay(payTo, "Money", CU.t("&r玩家&6 " + player.getName() + " &r向您转了&6 " + amount + " &r枚硬币"));
             return true;
         } else {
             ChatUtil.pluginSay(player, "Money", "&4转账失败，请稍后重试");
@@ -129,8 +129,8 @@ public class MoneyCommand implements CommandExecutor, TabExecutor {
         }
 
         if (db.setMoney(setTo.getName(), amount)) {
-            ChatUtil.pluginSay(player, "Money", CU.t("&r您已将玩家&6 " + setTo.getName() + " &r的米设置为&6 " + amount + " &r米"));
-            ChatUtil.pluginSay(setTo, "Money", CU.t("&r管理员已将你的米设置为&6 " + amount + " &r米"));
+            ChatUtil.pluginSay(player, "Money", CU.t("&r您已将玩家&6 " + setTo.getName() + " &r的硬币设置为&6 " + amount + " &r枚"));
+            ChatUtil.pluginSay(setTo, "Money", CU.t("&r管理员已将你的硬币设置为&6 " + amount + " &r枚"));
             return true;
         } else {
             ChatUtil.pluginSay(player, "Money", "&4设置失败，请稍后重试");
@@ -163,8 +163,8 @@ public class MoneyCommand implements CommandExecutor, TabExecutor {
 
         if (db.addMoney(addTo.getName(), amount)) {
             int newBalance = db.getMoney(addTo.getName());
-            ChatUtil.pluginSay(player, "Money", CU.t("&r您已为玩家&6 " + addTo.getName() + " &r添加了&6 " + amount + " &r米"));
-            ChatUtil.pluginSay(addTo, "Money", CU.t("&r管理员给你添加了&6 " + amount + " &r米 您目前有&6 " + newBalance + " &r米"));
+            ChatUtil.pluginSay(player, "Money", CU.t("&r您已为玩家&6 " + addTo.getName() + " &r添加了&6 " + amount + " &r枚硬币"));
+            ChatUtil.pluginSay(addTo, "Money", CU.t("&r管理员给你添加了&6 " + amount + " &r枚硬币 您目前有&6 " + newBalance + " &r枚硬币"));
             return true;
         } else {
             ChatUtil.pluginSay(player, "Money", "&4添加失败，请稍后重试");

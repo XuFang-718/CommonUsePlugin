@@ -60,8 +60,8 @@ public class PayCommand implements CommandExecutor, TabExecutor {
         }
 
         if (db.transfer(player.getName(), payTo.getName(), amount)) {
-            ChatUtil.pluginSay(player, "Money", CU.t("&r您已向玩家&6 " + payTo.getName() + " &r转了&6 " + amount + " &r米"));
-            ChatUtil.pluginSay(payTo, "Money", CU.t("&r玩家&6 " + player.getName() + " &r向您转了&6 " + amount + " &r米"));
+            ChatUtil.pluginSay(player, "Money", CU.t("&r您已向玩家&6 " + payTo.getName() + " &r转了&6 " + amount + " &r枚硬币"));
+            ChatUtil.pluginSay(payTo, "Money", CU.t("&r玩家&6 " + player.getName() + " &r向您转了&6 " + amount + " &r枚硬币"));
             return true;
         } else {
             ChatUtil.pluginSay(player, "Money", "&4转账失败，请稍后重试");
