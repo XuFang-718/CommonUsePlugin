@@ -14,9 +14,7 @@ import top.touchstudio.cup.modules.home.HomeCommand;
 import top.touchstudio.cup.modules.login.CommandInterceptor;
 import top.touchstudio.cup.modules.login.PlayerActionListener;
 import top.touchstudio.cup.modules.login.PlayerJoinListener;
-import top.touchstudio.cup.modules.money.MoneyCommand;
-import top.touchstudio.cup.modules.money.MoneyEvent;
-import top.touchstudio.cup.modules.money.PayCommand;
+
 import top.touchstudio.cup.modules.nightvision.NightVisionCommand;
 import top.touchstudio.cup.modules.quit.QuitCommand;
 import top.touchstudio.cup.modules.sneakspeedtree.SneakSpeedTreeListener;
@@ -54,7 +52,6 @@ public class ModuleManager {
         ModuleList.add("hat");
         ModuleList.add("deathhead");
         ModuleList.add("back");
-        ModuleList.add("money");
         ModuleList.add("bestgamemode");
         ModuleList.add("home");
 
@@ -121,18 +118,6 @@ public class ModuleManager {
         }else {
             CommandUtil.unregisterCommand(plugin,"back");
         }
-
-        //money
-        if (ModuleMap.get("money")){
-            plugin.getServer().getPluginManager().registerEvents(new MoneyEvent(),plugin);
-            plugin.getCommand("money").setExecutor(new MoneyCommand());
-            plugin.getCommand("pay").setExecutor(new PayCommand());
-        }else {
-            CommandUtil.unregisterCommand(plugin,"money");
-            CommandUtil.unregisterCommand(plugin,"pay");
-        }
-
-
 
         //连锁挖矿
         if (ModuleMap.get("chainmining")){
@@ -212,9 +197,17 @@ public class ModuleManager {
 
         //home
         if (ModuleMap.get("home")){
-            plugin.getCommand("home").setExecutor(new HomeCommand());
-            plugin.getCommand("sethome").setExecutor(new top.touchstudio.cup.modules.home.SetHomeCommand());
-            plugin.getCommand("delhome").setExecutor(new top.touchstudio.cup.modules.home.DelHomeCommand());
+            HomeCommand homeCommand = new HomeCommand();
+            plugin.getCommand("home").setExecutor(homeCommand);
+            plugin.getCommand("home").setTabCompleter(homeCommand);
+
+            top.touchstudio.cup.modules.home.SetHomeCommand setHomeCommand = new top.touchstudio.cup.modules.home.SetHomeCommand();
+            plugin.getCommand("sethome").setExecutor(setHomeCommand);
+            plugin.getCommand("sethome").setTabCompleter(setHomeCommand);
+
+            top.touchstudio.cup.modules.home.DelHomeCommand delHomeCommand = new top.touchstudio.cup.modules.home.DelHomeCommand();
+            plugin.getCommand("delhome").setExecutor(delHomeCommand);
+            plugin.getCommand("delhome").setTabCompleter(delHomeCommand);
         }else {
             CommandUtil.unregisterCommand(plugin,"home");
             CommandUtil.unregisterCommand(plugin,"sethome");

@@ -6,6 +6,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -114,9 +115,11 @@ public class TpaCommand implements CommandExecutor, TabExecutor {
         player.sendMessage(buildPrefix().append(Component.text("已向 ", NamedTextColor.GREEN))
                 .append(Component.text(target.getName(), NamedTextColor.GOLD))
                 .append(Component.text(" 发送传送请求", NamedTextColor.GREEN)));
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 
         // 发送给目标玩家
         sendTpaRequest(target, playerName);
+        target.playSound(target.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.5f);
 
         return true;
     }

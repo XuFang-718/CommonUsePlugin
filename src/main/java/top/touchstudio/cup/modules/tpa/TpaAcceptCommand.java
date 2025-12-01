@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -69,12 +70,14 @@ public class TpaAcceptCommand implements CommandExecutor, TabExecutor {
                 .append(Component.text("已接受 ", NamedTextColor.GREEN))
                 .append(Component.text(requesterName, NamedTextColor.GOLD))
                 .append(Component.text(" 的传送请求", NamedTextColor.GREEN)));
+        accepter.playSound(accepter.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 
         // 通知请求者
         requester.sendMessage(Component.text("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", NamedTextColor.GREEN));
         requester.sendMessage(buildPrefix().append(Component.text("✔ ", NamedTextColor.GREEN))
                 .append(Component.text(accepter.getName(), NamedTextColor.GOLD, TextDecoration.BOLD))
                 .append(Component.text(" 已接受您的传送请求!", NamedTextColor.GREEN)));
+        requester.playSound(requester.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.5f);
 
         // 使用 TeleportManager 处理传送（支持移动取消）
         final Player finalAccepter = accepter;

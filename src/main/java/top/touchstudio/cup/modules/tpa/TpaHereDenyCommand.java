@@ -2,6 +2,7 @@ package top.touchstudio.cup.modules.tpa;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -59,12 +60,14 @@ public class TpaHereDenyCommand implements CommandExecutor, TabExecutor {
                 .append(Component.text("已拒绝 ", NamedTextColor.RED))
                 .append(Component.text(requesterName, NamedTextColor.GOLD))
                 .append(Component.text(" 的传送请求", NamedTextColor.RED)));
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
 
         // 通知请求者
         if (requester != null && requester.isOnline()) {
             requester.sendMessage(buildPrefix().append(Component.text("✘ ", NamedTextColor.RED))
                     .append(Component.text(player.getName(), NamedTextColor.GOLD))
                     .append(Component.text(" 拒绝了您的传送请求", NamedTextColor.RED)));
+            requester.playSound(requester.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
         }
 
         return true;
@@ -74,8 +77,8 @@ public class TpaHereDenyCommand implements CommandExecutor, TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         List<String> tab = new ArrayList<>();
         if (strings.length == 1 && commandSender instanceof Player) {
-            Player player = (Player) commandSender;
-            List<String> requesters = TpaHereCommand.getRequesters(player.getUniqueId());
+            Player player1 = (Player) commandSender;
+            List<String> requesters = TpaHereCommand.getRequesters(player1.getUniqueId());
             for (String name : requesters) {
                 if (name.toLowerCase().startsWith(strings[0].toLowerCase())) {
                     tab.add(name);

@@ -5,7 +5,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import top.touchstudio.cup.configs.ModuleConfig;
 import top.touchstudio.cup.configs.PlayerConfig;
 import top.touchstudio.cup.modules.ModuleManager;
-import top.touchstudio.cup.modules.money.MoneyDatabase;
 
 import java.io.IOException;
 
@@ -31,9 +30,6 @@ public final class CommonUsePlugin extends JavaPlugin {
         } catch (IOException | InvalidConfigurationException e) {
             throw new RuntimeException(e);
         }
-
-        // 初始化 Money SQLite 数据库
-        MoneyDatabase.getInstance().init();
     }
 
     @Override
@@ -45,9 +41,6 @@ public final class CommonUsePlugin extends JavaPlugin {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        // 关闭 Money 数据库连接
-        MoneyDatabase.getInstance().close();
     }
 
 }

@@ -22,10 +22,7 @@ commands:
     description: 将主手物品戴在头上
   back:
     description: 返回死亡地点
-  money:
-    description: 金钱指令
-  pay:
-    description: 转账给其他玩家
+
   quit:
     description: 退出服务器
   chainmining:

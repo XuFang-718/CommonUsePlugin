@@ -1,7 +1,7 @@
 package top.touchstudio.cup.modules.back;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,6 +31,7 @@ public class BackCommand implements CommandExecutor, Listener {
         Player player = (Player) commandSender;
         if (!BackMap.containsKey(player)){
             ChatUtil.pluginSay(player, PREFIX, "未找到死亡地点");
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
             return false;
         }
 
@@ -51,5 +52,6 @@ public class BackCommand implements CommandExecutor, Listener {
         Player player = event.getPlayer();
         BackMap.put(player,player.getLocation());
         ChatUtil.pluginSay(player, PREFIX, "使用/back命令返回死亡地点");
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 0.5f);
     }
 }

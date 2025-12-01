@@ -3,6 +3,7 @@ package top.touchstudio.cup.modules.tpa;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -68,6 +69,7 @@ public class TpaHereAcceptCommand implements CommandExecutor, TabExecutor {
                 .append(Component.text("已接受 ", NamedTextColor.GREEN))
                 .append(Component.text(requesterName, NamedTextColor.GOLD))
                 .append(Component.text(" 的传送请求", NamedTextColor.GREEN)));
+        accepter.playSound(accepter.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 
         // 通知请求者
         requester.sendMessage(Component.text("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", NamedTextColor.GREEN));
@@ -78,6 +80,7 @@ public class TpaHereAcceptCommand implements CommandExecutor, TabExecutor {
                 .append(Component.text("3", NamedTextColor.GOLD))
                 .append(Component.text(" 秒后传送到您身边", NamedTextColor.GRAY)));
         requester.sendMessage(Component.text("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", NamedTextColor.GREEN));
+        requester.playSound(requester.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.5f);
 
         // 接受者传送到请求者身边（使用 TeleportManager）
         final Player finalAccepter = accepter;

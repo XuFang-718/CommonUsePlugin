@@ -1,7 +1,7 @@
 package top.touchstudio.cup.modules.home;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -70,12 +70,14 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
         if (strings.length == 1 && strings[0].equalsIgnoreCase("list")) {
             if (homeSection.getKeys(false).isEmpty()) {
                 ChatUtil.pluginSay(player, PREFIX, "未找到任何Home");
+                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                 return true;
             }
             ChatUtil.pluginSay(player, PREFIX, "您的家列表:");
             homeSection.getKeys(false).forEach(key -> {
                 ChatUtil.pluginSay(player, PREFIX, "- &6" + key);
             });
+            player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
             return true;
         }
 
@@ -91,6 +93,7 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
         if (strings.length == 1) {
             if (!finalHomeSection.contains(strings[0])) {
                 ChatUtil.pluginSay(player, PREFIX, "家 &6" + strings[0] + " &r不存在");
+                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                 return true;
             }
 
