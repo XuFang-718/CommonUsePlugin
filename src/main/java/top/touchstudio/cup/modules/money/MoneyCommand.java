@@ -27,7 +27,7 @@ public class MoneyCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         if (!(commandSender instanceof Player)) {
-            ChatUtil.pluginSay(commandSender, "&4此命令只能由玩家执行!");
+            ChatUtil.pluginSay(commandSender, "Money", "&4此命令只能由玩家执行!");
             return false;
         }
         Player player = (Player) commandSender;
@@ -52,122 +52,122 @@ public class MoneyCommand implements CommandExecutor, TabExecutor {
     }
 
     private void showHelp(Player player) {
-        ChatUtil.pluginSay(player, "&e===== 金钱系统帮助 =====");
-        ChatUtil.pluginSay(player, "&6/money info &7- 查看余额");
-        ChatUtil.pluginSay(player, "&6/money pay <玩家> <数量> &7- 转账给其他玩家");
+        ChatUtil.pluginSay(player, "Money", "&e===== 金钱系统帮助 =====");
+        ChatUtil.pluginSay(player, "Money", "&6/money info &7- 查看余额");
+        ChatUtil.pluginSay(player, "Money", "&6/pay <玩家> <数量> &7- 转账给其他玩家");
         if (player.isOp()) {
-            ChatUtil.pluginSay(player, "&6/money set <玩家> <数量> &7- 设置玩家金钱");
-            ChatUtil.pluginSay(player, "&6/money add <玩家> <数量> &7- 增加玩家金钱");
+            ChatUtil.pluginSay(player, "Money", "&6/money set <玩家> <数量> &7- 设置玩家金钱");
+            ChatUtil.pluginSay(player, "Money", "&6/money add <玩家> <数量> &7- 增加玩家金钱");
         }
     }
 
     private boolean handleInfo(Player player) {
         int playerMoney = db.getMoney(player.getName());
-        ChatUtil.pluginSay(player, "您目前有 " + playerMoney + " 米");
+        ChatUtil.pluginSay(player, "Money", "您目前有 " + playerMoney + " 枚硬币！");
         return true;
     }
 
     private boolean handlePay(Player player, String[] strings) {
         if (strings.length < 3) {
-            ChatUtil.pluginSay(player, "用法 /money pay <玩家名> <数量>");
+            ChatUtil.pluginSay(player, "Money", "用法 /money pay <玩家名> <数量>");
             return false;
         }
 
         Player payTo = Bukkit.getPlayer(strings[1]);
         if (payTo == null) {
-            ChatUtil.pluginSay(player, "未找到此玩家");
+            ChatUtil.pluginSay(player, "Money", "未找到此玩家");
             return false;
         }
 
         if (payTo.equals(player)) {
-            ChatUtil.pluginSay(player, "&4不能给自己转账!");
+            ChatUtil.pluginSay(player, "Money", "&4不能给自己转账!");
             return false;
         }
 
         int amount = parsePositiveInt(strings[2]);
         if (amount <= 0) {
-            ChatUtil.pluginSay(player, "&4请输入有效的正整数金额");
+            ChatUtil.pluginSay(player, "Money", "&4请输入有效的正整数金额");
             return false;
         }
 
         if (db.getMoney(player.getName()) < amount) {
-            ChatUtil.pluginSay(player, "您的余额不足");
+            ChatUtil.pluginSay(player, "Money", "您的余额不足");
             return false;
         }
 
         if (db.transfer(player.getName(), payTo.getName(), amount)) {
-            ChatUtil.pluginSay(player, CU.t("&r您已向玩家&6 " + payTo.getName() + " &r转了&6 " + amount + " &r米"));
-            ChatUtil.pluginSay(payTo, CU.t("&r玩家&6 " + player.getName() + " &r向您转了&6 " + amount + " &r米"));
+            ChatUtil.pluginSay(player, "Money", CU.t("&r您已向玩家&6 " + payTo.getName() + " &r转了&6 " + amount + " &r米"));
+            ChatUtil.pluginSay(payTo, "Money", CU.t("&r玩家&6 " + player.getName() + " &r向您转了&6 " + amount + " &r米"));
             return true;
         } else {
-            ChatUtil.pluginSay(player, "&4转账失败，请稍后重试");
+            ChatUtil.pluginSay(player, "Money", "&4转账失败，请稍后重试");
             return false;
         }
     }
 
     private boolean handleSet(Player player, String[] strings) {
         if (!player.isOp()) {
-            ChatUtil.pluginSay(player, "&4你不是OP!");
+            ChatUtil.pluginSay(player, "Money", "&4你不是OP!");
             return false;
         }
 
         if (strings.length < 3) {
-            ChatUtil.pluginSay(player, "用法 /money set <玩家名> <数量>");
+            ChatUtil.pluginSay(player, "Money", "用法 /money set <玩家名> <数量>");
             return false;
         }
 
         Player setTo = Bukkit.getPlayer(strings[1]);
         if (setTo == null) {
-            ChatUtil.pluginSay(player, "未找到此玩家");
+            ChatUtil.pluginSay(player, "Money", "未找到此玩家");
             return false;
         }
 
         int amount = parseNonNegativeInt(strings[2]);
         if (amount < 0) {
-            ChatUtil.pluginSay(player, "&4请输入有效的非负整数金额");
+            ChatUtil.pluginSay(player, "Money", "&4请输入有效的非负整数金额");
             return false;
         }
 
         if (db.setMoney(setTo.getName(), amount)) {
-            ChatUtil.pluginSay(player, CU.t("&r您已将玩家&6 " + setTo.getName() + " &r的米设置为&6 " + amount + " &r米"));
-            ChatUtil.pluginSay(setTo, CU.t("&r管理员已将你的米设置为&6 " + amount + " &r米"));
+            ChatUtil.pluginSay(player, "Money", CU.t("&r您已将玩家&6 " + setTo.getName() + " &r的米设置为&6 " + amount + " &r米"));
+            ChatUtil.pluginSay(setTo, "Money", CU.t("&r管理员已将你的米设置为&6 " + amount + " &r米"));
             return true;
         } else {
-            ChatUtil.pluginSay(player, "&4设置失败，请稍后重试");
+            ChatUtil.pluginSay(player, "Money", "&4设置失败，请稍后重试");
             return false;
         }
     }
 
     private boolean handleAdd(Player player, String[] strings) {
         if (!player.isOp()) {
-            ChatUtil.pluginSay(player, "&4你不是OP!");
+            ChatUtil.pluginSay(player, "Money", "&4你不是OP!");
             return false;
         }
 
         if (strings.length < 3) {
-            ChatUtil.pluginSay(player, "用法 /money add <玩家名> <数量>");
+            ChatUtil.pluginSay(player, "Money", "用法 /money add <玩家名> <数量>");
             return false;
         }
 
         Player addTo = Bukkit.getPlayer(strings[1]);
         if (addTo == null) {
-            ChatUtil.pluginSay(player, "未找到此玩家");
+            ChatUtil.pluginSay(player, "Money", "未找到此玩家");
             return false;
         }
 
         int amount = parsePositiveInt(strings[2]);
         if (amount <= 0) {
-            ChatUtil.pluginSay(player, "&4请输入有效的正整数金额");
+            ChatUtil.pluginSay(player, "Money", "&4请输入有效的正整数金额");
             return false;
         }
 
         if (db.addMoney(addTo.getName(), amount)) {
             int newBalance = db.getMoney(addTo.getName());
-            ChatUtil.pluginSay(player, CU.t("&r您已为玩家&6 " + addTo.getName() + " &r添加了&6 " + amount + " &r米"));
-            ChatUtil.pluginSay(addTo, CU.t("&r管理员给你添加了&6 " + amount + " &r米 您目前有&6 " + newBalance + " &r米"));
+            ChatUtil.pluginSay(player, "Money", CU.t("&r您已为玩家&6 " + addTo.getName() + " &r添加了&6 " + amount + " &r米"));
+            ChatUtil.pluginSay(addTo, "Money", CU.t("&r管理员给你添加了&6 " + amount + " &r米 您目前有&6 " + newBalance + " &r米"));
             return true;
         } else {
-            ChatUtil.pluginSay(player, "&4添加失败，请稍后重试");
+            ChatUtil.pluginSay(player, "Money", "&4添加失败，请稍后重试");
             return false;
         }
     }
