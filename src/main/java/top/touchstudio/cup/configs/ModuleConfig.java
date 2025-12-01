@@ -43,10 +43,7 @@ public class ModuleConfig {
         modulesSection = moduleConfig.getConfigurationSection("modules");
         for (String name : ModuleManager.ModuleList) {
             ModuleManager.ModuleMap.put(name, modulesSection.getBoolean(name + ".IsEnable"));
-            plugin.getServer().getConsoleSender().sendMessage(name + ": " + modulesSection.getBoolean(name + ".IsEnable"));
-
         }
-        plugin.getServer().getConsoleSender().sendMessage("home.MaxHome" + ": " + modulesSection.getInt("home" + ".MaxHome"));
 
     }
 

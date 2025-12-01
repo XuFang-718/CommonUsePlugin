@@ -102,9 +102,7 @@ public class CommandUtil {
                 removed = true;
             }
 
-            if (removed) {
-                plugin.getLogger().info("成功移除指令: " + commandName);
-            } else {
+            if (!removed) {
                 plugin.getLogger().warning("未找到指令: " + commandName);
             }
 
@@ -117,7 +115,6 @@ public class CommandUtil {
                 PluginCommand command = plugin.getServer().getPluginCommand(commandName);
                 if (command != null) {
                     command.unregister(getCommandMap());
-                    plugin.getLogger().info("使用备用方案成功移除指令: " + commandName);
                 }
             } catch (Exception ex) {
                 plugin.getLogger().warning("备用方案也失败了: " + commandName);
@@ -141,7 +138,6 @@ public class CommandUtil {
         try {
             CommandMap commandMap = getCommandMap();
             commandMap.register(plugin.getName(), command);
-            plugin.getLogger().info("成功注册指令: " + commandName);
         } catch (Exception e) {
             plugin.getLogger().warning("注册指令失败: " + commandName);
             e.printStackTrace();
@@ -160,9 +156,6 @@ public class CommandUtil {
             if (command != null) {
                 // 使用 Command 的 unregister 方法
                 command.unregister(commandMap);
-                plugin.getLogger().info("安全移除指令: " + commandName);
-            } else {
-                plugin.getLogger().warning("未找到指令: " + commandName);
             }
         } catch (Exception e) {
             plugin.getLogger().warning("安全移除指令失败: " + commandName);
