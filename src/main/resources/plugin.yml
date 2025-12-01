@@ -7,7 +7,11 @@ commands:
   cup:
     description: CommonUsePlugin
   tpa:
-    description: 传送玩家
+    description: 发送传送请求
+  tpaccept:
+    description: 接受传送请求
+  tpadeny:
+    description: 拒绝传送请求
   hat:
     description: 将主手物品戴在头上
   back:
@@ -55,4 +59,8 @@ commands:
   旁观模式:
     description: 设置为旁观模式
   home:
-    description: home
+    description: 传送到家
+  sethome:
+    description: 设置家
+  delhome:
+    description: 删除家

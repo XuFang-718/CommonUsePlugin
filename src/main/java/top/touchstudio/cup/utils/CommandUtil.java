@@ -66,8 +66,8 @@ public class CommandUtil {
             CommandMap commandMap = getCommandMap();
             Map<String, Command> knownCommands = getKnownCommands(commandMap);
 
-            // 移除命令
-            boolean removed = false;
+            // 收集需要移除的 key
+            java.util.List<String> keysToRemove = new java.util.ArrayList<>();
 
             // 方法1: 直接移除命令名
             if (knownCommands.containsKey(commandName)) {
@@ -75,30 +75,31 @@ public class CommandUtil {
                 if (command instanceof PluginCommand) {
                     PluginCommand pluginCommand = (PluginCommand) command;
                     if (pluginCommand.getPlugin().equals(plugin)) {
-                        knownCommands.remove(commandName);
-                        removed = true;
+                        keysToRemove.add(commandName);
                     }
                 } else {
-                    knownCommands.remove(commandName);
-                    removed = true;
+                    keysToRemove.add(commandName);
                 }
             }
 
-            // 方法2: 遍历所有命令，移除匹配的命令
-            Iterator<Map.Entry<String, Command>> iterator = knownCommands.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, Command> entry = iterator.next();
+            // 方法2: 遍历所有命令，收集匹配的命令 key
+            for (Map.Entry<String, Command> entry : knownCommands.entrySet()) {
                 Command command = entry.getValue();
-
                 if (command instanceof PluginCommand) {
                     PluginCommand pluginCommand = (PluginCommand) command;
                     if (pluginCommand.getPlugin().equals(plugin) &&
                             (pluginCommand.getName().equalsIgnoreCase(commandName) ||
                                     (pluginCommand.getAliases() != null && pluginCommand.getAliases().contains(commandName)))) {
-                        iterator.remove();
-                        removed = true;
+                        keysToRemove.add(entry.getKey());
                     }
                 }
+            }
+
+            // 统一移除
+            boolean removed = false;
+            for (String key : keysToRemove) {
+                knownCommands.remove(key);
+                removed = true;
             }
 
             if (removed) {

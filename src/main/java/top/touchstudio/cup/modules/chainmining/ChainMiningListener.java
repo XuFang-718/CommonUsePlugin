@@ -25,7 +25,8 @@ public class ChainMiningListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!CMMap.containsKey(event.getPlayer()) || !CMMap.get(event.getPlayer())) {
+        // 默认开启连锁挖矿，只有明确关闭时才不触发
+        if (CMMap.containsKey(event.getPlayer()) && !CMMap.get(event.getPlayer())) {
             return;
         }
         Block block = event.getBlock();

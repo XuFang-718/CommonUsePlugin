@@ -35,78 +35,66 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
         int maxHome = Integer.parseInt(ModuleConfig.modulesSection.get("home.MaxHome").toString());
         Player player = (Player) commandSender;
         YamlConfiguration config = PlayerConfig.playerConfig;
-        ConfigurationSection homeSection = config.getConfigurationSection(player.getName()).getConfigurationSection("homes");
-        if (strings.length == 1 && strings[0].equalsIgnoreCase("list")){
-            if (homeSection.getKeys(false).isEmpty()){
+
+        // 确保玩家数据存在
+        if (!config.contains(player.getName())) {
+            PlayerConfig.createPlayerData(player);
+        }
+
+        ConfigurationSection playerSection = config.getConfigurationSection(player.getName());
+        if (playerSection == null) {
+            // 如果仍然为空，手动创建
+            config.createSection(player.getName());
+            playerSection = config.getConfigurationSection(player.getName());
+            playerSection.createSection("homes");
+            playerSection.set("money", 50);
+            try {
+                config.save(PlayerConfig.playerConfigFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        ConfigurationSection homeSection = playerSection.getConfigurationSection("homes");
+        if (homeSection == null) {
+            // 创建 homes 节点
+            homeSection = playerSection.createSection("homes");
+            try {
+                config.save(PlayerConfig.playerConfigFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        // /home list - 列出所有家
+        if (strings.length == 1 && strings[0].equalsIgnoreCase("list")) {
+            if (homeSection.getKeys(false).isEmpty()) {
                 ChatUtil.pluginSay(player, PREFIX, "未找到任何Home");
                 return true;
             }
+            ChatUtil.pluginSay(player, PREFIX, "您的家列表:");
             homeSection.getKeys(false).forEach(key -> {
-               ChatUtil.pluginSay(player, PREFIX, key);
+                ChatUtil.pluginSay(player, PREFIX, "- &6" + key);
             });
             return true;
-
         }
 
-        if(strings.length < 1) {
-            ChatUtil.pluginSay(player, PREFIX, "用法 /home 名称");
-            return true;
-        }
-        if (strings[0].equalsIgnoreCase("set")) {
-            if (strings.length != 2) {
-                ChatUtil.pluginSay(player, PREFIX, "用法 /home set 名称");
-                return true;
-            }
-
-            if (homeSection.getKeys(false).size() >= maxHome){
-                ChatUtil.pluginSay(player, PREFIX, "已达到最大Home数");
-                return true;
-            }
-            if (homeSection != null) {
-                if (homeSection.contains(strings[1])) {
-                    ChatUtil.pluginSay(player, PREFIX, "存在相同的名字");
-                    return true;
-                }
-            }
-
-            homeSection.set(strings[1], player.getLocation());
-            ChatUtil.pluginSay(player, PREFIX, "已添加 " + strings[1]);
-            try {
-                config.save(PlayerConfig.playerConfigFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return true;
-        }
-        if (strings[0].equalsIgnoreCase("delete")) {
-            if (strings.length != 2) {
-                ChatUtil.pluginSay(player, PREFIX, "用法 /home delete 名称");
-                return true;
-            }
-            if (homeSection != null) {
-                if (!homeSection.contains(strings[1])) {
-                    ChatUtil.pluginSay(player, PREFIX, "该Home不存在");
-                    return true;
-                }
-            }
-
-            homeSection.set(strings[1], null);
-            ChatUtil.pluginSay(player, PREFIX, "已删除 " + strings[1]);
-            try {
-                config.save(PlayerConfig.playerConfigFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        // /home - 显示帮助
+        if (strings.length < 1) {
+            showHelp(player);
             return true;
         }
 
-        if(strings.length  ==1) {
-            if (homeSection == null || !homeSection.contains(strings[0])) {
-                ChatUtil.pluginSay(player, PREFIX, "该Home不存在");
+        final ConfigurationSection finalHomeSection = homeSection;
+
+        // /home <名称> - 传送到家
+        if (strings.length == 1) {
+            if (!finalHomeSection.contains(strings[0])) {
+                ChatUtil.pluginSay(player, PREFIX, "家 &6" + strings[0] + " &r不存在");
                 return true;
             }
 
-            Location homeLoc = (Location) homeSection.get(strings[0]);
+            Location homeLoc = (Location) finalHomeSection.get(strings[0]);
             String homeName = strings[0];
             TeleportManager.teleportWithDelay(player, homeLoc, 3,
                     p -> ChatUtil.pluginSay(p, PREFIX, "已传送到 " + homeName),
@@ -114,17 +102,38 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        showHelp(player);
         return false;
+    }
+
+    private void showHelp(Player player) {
+        ChatUtil.pluginSay(player, PREFIX, "&e===== Home 帮助 =====");
+        ChatUtil.pluginSay(player, PREFIX, "&6/home <名称> &7- 传送到家");
+        ChatUtil.pluginSay(player, PREFIX, "&6/home list &7- 列出所有家");
+        ChatUtil.pluginSay(player, PREFIX, "&6/sethome <名称> &7- 设置家");
+        ChatUtil.pluginSay(player, PREFIX, "&6/delhome <名称> &7- 删除家");
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         List<String> list = new ArrayList<>();
-        if(strings.length == 1) {
-            list.add("set");
-            list.add("delete");
+        if (strings.length == 1) {
             list.add("list");
-        };
+            // 添加玩家的家名称
+            if (commandSender instanceof Player) {
+                Player player = (Player) commandSender;
+                YamlConfiguration config = PlayerConfig.playerConfig;
+                ConfigurationSection playerSection = config.getConfigurationSection(player.getName());
+                if (playerSection != null) {
+                    ConfigurationSection homeSection = playerSection.getConfigurationSection("homes");
+                    if (homeSection != null) {
+                        list.addAll(homeSection.getKeys(false));
+                    }
+                }
+            }
+            // 过滤
+            list.removeIf(option -> !option.toLowerCase().startsWith(strings[0].toLowerCase()));
+        }
         return list;
     }
 }

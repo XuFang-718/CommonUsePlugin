@@ -20,7 +20,9 @@ import top.touchstudio.cup.modules.money.PayCommand;
 import top.touchstudio.cup.modules.nightvision.NightVisionCommand;
 import top.touchstudio.cup.modules.quit.QuitCommand;
 import top.touchstudio.cup.modules.sneakspeedtree.SneakSpeedTreeListener;
-import top.touchstudio.cup.modules.tpa.Tpa;
+import top.touchstudio.cup.modules.tpa.TpaCommand;
+import top.touchstudio.cup.modules.tpa.TpaAcceptCommand;
+import top.touchstudio.cup.modules.tpa.TpaDenyCommand;
 import top.touchstudio.cup.utils.CommandUtil;
 import top.touchstudio.cup.utils.TeleportManager;
 
@@ -85,10 +87,13 @@ public class ModuleManager {
 
         //tpa
         if (ModuleMap.get("tpa")){
-            plugin.getCommand("tpa").setExecutor(new Tpa());
-            plugin.getServer().getPluginManager().registerEvents(new Tpa(),plugin);
+            plugin.getCommand("tpa").setExecutor(new top.touchstudio.cup.modules.tpa.TpaCommand());
+            plugin.getCommand("tpaccept").setExecutor(new top.touchstudio.cup.modules.tpa.TpaAcceptCommand());
+            plugin.getCommand("tpadeny").setExecutor(new top.touchstudio.cup.modules.tpa.TpaDenyCommand());
         }else {
             CommandUtil.unregisterCommand(plugin,"tpa");
+            CommandUtil.unregisterCommand(plugin,"tpaccept");
+            CommandUtil.unregisterCommand(plugin,"tpadeny");
         }
 
         //hat
@@ -202,8 +207,12 @@ public class ModuleManager {
         //home
         if (ModuleMap.get("home")){
             plugin.getCommand("home").setExecutor(new HomeCommand());
+            plugin.getCommand("sethome").setExecutor(new top.touchstudio.cup.modules.home.SetHomeCommand());
+            plugin.getCommand("delhome").setExecutor(new top.touchstudio.cup.modules.home.DelHomeCommand());
         }else {
             CommandUtil.unregisterCommand(plugin,"home");
+            CommandUtil.unregisterCommand(plugin,"sethome");
+            CommandUtil.unregisterCommand(plugin,"delhome");
         }
 
 
