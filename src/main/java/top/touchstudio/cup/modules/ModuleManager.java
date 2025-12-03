@@ -7,6 +7,7 @@ import top.touchstudio.cup.configs.ModuleConfig;
 import top.touchstudio.cup.modules.back.BackCommand;
 import top.touchstudio.cup.modules.bestgamamode.*;
 import top.touchstudio.cup.modules.chainmining.ChainMiningCommand;
+import top.touchstudio.cup.modules.chainmining.ChainMiningDatabase;
 import top.touchstudio.cup.modules.chainmining.ChainMiningListener;
 import top.touchstudio.cup.modules.deathhead.DeathHead;
 import top.touchstudio.cup.modules.hat.HatCommand;
@@ -121,6 +122,7 @@ public class ModuleManager {
 
         //连锁挖矿
         if (ModuleMap.get("chainmining")){
+            ChainMiningDatabase.getInstance().init();
             plugin.getServer().getPluginManager().registerEvents(new ChainMiningListener(plugin), plugin); // 传递插件实例
             plugin.getCommand("chainmining").setExecutor(new ChainMiningCommand(plugin));
             plugin.getCommand("cm").setExecutor(new ChainMiningCommand(plugin));

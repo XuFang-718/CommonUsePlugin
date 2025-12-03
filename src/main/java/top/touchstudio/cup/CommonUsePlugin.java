@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import top.touchstudio.cup.configs.ModuleConfig;
 import top.touchstudio.cup.configs.PlayerConfig;
 import top.touchstudio.cup.modules.ModuleManager;
+import top.touchstudio.cup.modules.chainmining.ChainMiningDatabase;
 
 import java.io.IOException;
 
@@ -40,6 +41,11 @@ public final class CommonUsePlugin extends JavaPlugin {
             moduleConfig.onServerDisable();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+
+        // 关闭连锁挖矿数据库
+        if (ModuleManager.ModuleMap.get("chainmining") != null && ModuleManager.ModuleMap.get("chainmining")) {
+            ChainMiningDatabase.getInstance().close();
         }
     }
 

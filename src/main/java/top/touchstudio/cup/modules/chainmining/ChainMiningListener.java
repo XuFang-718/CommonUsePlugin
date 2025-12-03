@@ -1,6 +1,11 @@
 package top.touchstudio.cup.modules.chainmining;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -43,6 +48,19 @@ public class ChainMiningListener implements Listener {
             }
 
             int blocksBroken = blocksToBreak.size();
+
+            // 连锁挖矿成功音效（挖掉超过1个方块时播放）
+            if (blocksBroken > 1) {
+                Player player = event.getPlayer();
+                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 1.2f);
+
+                // 首次使用连锁挖矿提示
+                ChainMiningDatabase db = ChainMiningDatabase.getInstance();
+                if (!db.hasUsedChainMining(player.getName())) {
+                    db.markAsUsed(player.getName());
+                    sendFirstUseMessage(player);
+                }
+            }
             int newDurability = tool.getDurability() + blocksBroken;
 
             if (newDurability >= tool.getType().getMaxDurability()) {
@@ -92,5 +110,34 @@ public class ChainMiningListener implements Listener {
         adjacentBlocks.add(block.getRelative(BlockFace.SOUTH_EAST));
         adjacentBlocks.add(block.getRelative(BlockFace.SOUTH_WEST));
         return adjacentBlocks;
+    }
+
+    private void sendFirstUseMessage(Player player) {
+        // 播放特殊音效
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.5f);
+
+        // 构建美化消息
+        Component prefix = Component.text("[", NamedTextColor.GRAY)
+                .append(Component.text("BlockLife", NamedTextColor.GREEN, TextDecoration.BOLD))
+                .append(Component.text("] ", NamedTextColor.GRAY));
+
+        Component message = prefix
+                .append(Component.text("✦ ", NamedTextColor.GOLD))
+                .append(Component.text("你又掌握了一个技巧: ", NamedTextColor.WHITE))
+                .append(Component.text("连锁挖矿", NamedTextColor.AQUA, TextDecoration.BOLD))
+                .append(Component.text("!", NamedTextColor.WHITE));
+
+        Component tip = Component.text("   ")
+                .append(Component.text("💡 ", NamedTextColor.YELLOW))
+                .append(Component.text("不想要连锁挖矿? 输入 ", NamedTextColor.GRAY))
+                .append(Component.text("/cm off", NamedTextColor.GOLD)
+                        .clickEvent(ClickEvent.suggestCommand("/cm off"))
+                        .decorate(TextDecoration.UNDERLINED))
+                .append(Component.text(" 关闭", NamedTextColor.GRAY));
+
+        player.sendMessage(Component.empty());
+        player.sendMessage(message);
+        player.sendMessage(tip);
+        player.sendMessage(Component.empty());
     }
 }
